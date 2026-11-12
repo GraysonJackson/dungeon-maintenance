@@ -1,0 +1,36 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build Dungeon Maintenance",
+      "type": "shell",
+      "command": "bash ./build.sh",
+      "windows": {
+        "command": "powershell.exe",
+        "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}/build.ps1"]
+      },
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Run Dungeon Maintenance",
+      "type": "process",
+      "command": "${workspaceFolder}/build/dungeon-maintenance",
+      "windows": { "command": "${workspaceFolder}/build/dungeon-maintenance.exe" },
+      "options": { "cwd": "${workspaceFolder}" },
+      "dependsOn": "Build Dungeon Maintenance",
+      "problemMatcher": []
+    },
+    {
+      "label": "Test Dungeon Maintenance",
+      "type": "process",
+      "command": "${workspaceFolder}/build/dungeon-maintenance",
+      "windows": { "command": "${workspaceFolder}/build/dungeon-maintenance.exe" },
+      "args": ["--self-test"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "dependsOn": "Build Dungeon Maintenance",
+      "problemMatcher": []
+    }
+  ]
+}

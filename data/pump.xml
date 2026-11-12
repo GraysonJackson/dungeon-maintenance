@@ -1,0 +1,398 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Scene name="pump">
+  <GameObject id="wall_0_0">
+    <BodyComponent x="0" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_1_0">
+    <BodyComponent x="40" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_2_0">
+    <BodyComponent x="80" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_3_0">
+    <BodyComponent x="120" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_4_0">
+    <BodyComponent x="160" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_5_0">
+    <BodyComponent x="200" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_6_0">
+    <BodyComponent x="240" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_7_0">
+    <BodyComponent x="280" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_8_0">
+    <BodyComponent x="320" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_9_0">
+    <BodyComponent x="360" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_10_0">
+    <BodyComponent x="400" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_11_0">
+    <BodyComponent x="440" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_12_0">
+    <BodyComponent x="480" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_13_0">
+    <BodyComponent x="520" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_14_0">
+    <BodyComponent x="560" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_15_0">
+    <BodyComponent x="600" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_16_0">
+    <BodyComponent x="640" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_17_0">
+    <BodyComponent x="680" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_18_0">
+    <BodyComponent x="720" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_19_0">
+    <BodyComponent x="760" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_20_0">
+    <BodyComponent x="800" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_21_0">
+    <BodyComponent x="840" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_22_0">
+    <BodyComponent x="880" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_23_0">
+    <BodyComponent x="920" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_24_0">
+    <BodyComponent x="960" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_25_0">
+    <BodyComponent x="1000" y="0" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_0_1">
+    <BodyComponent x="0" y="40" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_12_1">
+    <BodyComponent x="480" y="40" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_25_1">
+    <BodyComponent x="1000" y="40" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_0_2">
+    <BodyComponent x="0" y="80" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_12_2">
+    <BodyComponent x="480" y="80" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_25_2">
+    <BodyComponent x="1000" y="80" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_0_3">
+    <BodyComponent x="0" y="120" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_12_3">
+    <BodyComponent x="480" y="120" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_25_3">
+    <BodyComponent x="1000" y="120" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_0_4">
+    <BodyComponent x="0" y="160" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_12_4">
+    <BodyComponent x="480" y="160" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_25_4">
+    <BodyComponent x="1000" y="160" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_0_5">
+    <BodyComponent x="0" y="200" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_12_5">
+    <BodyComponent x="480" y="200" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_25_5">
+    <BodyComponent x="1000" y="200" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_0_6">
+    <BodyComponent x="0" y="240" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_12_6">
+    <BodyComponent x="480" y="240" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_25_6">
+    <BodyComponent x="1000" y="240" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_0_7">
+    <BodyComponent x="0" y="280" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_12_7">
+    <BodyComponent x="480" y="280" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_25_7">
+    <BodyComponent x="1000" y="280" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_0_8">
+    <BodyComponent x="0" y="320" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_12_8">
+    <BodyComponent x="480" y="320" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_25_8">
+    <BodyComponent x="1000" y="320" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_0_9">
+    <BodyComponent x="0" y="360" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_12_9">
+    <BodyComponent x="480" y="360" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_25_9">
+    <BodyComponent x="1000" y="360" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_0_10">
+    <BodyComponent x="0" y="400" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_12_10">
+    <BodyComponent x="480" y="400" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_25_10">
+    <BodyComponent x="1000" y="400" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_0_11">
+    <BodyComponent x="0" y="440" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_25_11">
+    <BodyComponent x="1000" y="440" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_0_12">
+    <BodyComponent x="0" y="480" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_12_12">
+    <BodyComponent x="480" y="480" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_25_12">
+    <BodyComponent x="1000" y="480" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_0_13">
+    <BodyComponent x="0" y="520" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_12_13">
+    <BodyComponent x="480" y="520" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_25_13">
+    <BodyComponent x="1000" y="520" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_0_14">
+    <BodyComponent x="0" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_1_14">
+    <BodyComponent x="40" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_2_14">
+    <BodyComponent x="80" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_3_14">
+    <BodyComponent x="120" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_4_14">
+    <BodyComponent x="160" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_5_14">
+    <BodyComponent x="200" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_6_14">
+    <BodyComponent x="240" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_7_14">
+    <BodyComponent x="280" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_8_14">
+    <BodyComponent x="320" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_9_14">
+    <BodyComponent x="360" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_10_14">
+    <BodyComponent x="400" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_11_14">
+    <BodyComponent x="440" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_12_14">
+    <BodyComponent x="480" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_13_14">
+    <BodyComponent x="520" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_14_14">
+    <BodyComponent x="560" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_15_14">
+    <BodyComponent x="600" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_16_14">
+    <BodyComponent x="640" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_17_14">
+    <BodyComponent x="680" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_18_14">
+    <BodyComponent x="720" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_19_14">
+    <BodyComponent x="760" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_20_14">
+    <BodyComponent x="800" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_21_14">
+    <BodyComponent x="840" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_22_14">
+    <BodyComponent x="880" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_23_14">
+    <BodyComponent x="920" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_24_14">
+    <BodyComponent x="960" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="wall_25_14">
+    <BodyComponent x="1000" y="560" width="40" height="40" solid="true" />
+    <SpriteComponent textureKey="wall" />
+  </GameObject>
+  <GameObject id="player">
+    <BodyComponent x="86" y="446" width="28" height="28" solid="true" />
+    <SpriteComponent textureKey="player" />
+    <ControllerComponent speed="180" />
+  </GameObject>
+  <GameObject id="crate">
+    <BodyComponent x="484" y="444" width="32" height="32" solid="true" />
+    <SpriteComponent textureKey="crate" />
+    <PushableComponent />
+  </GameObject>
+  <GameObject id="pump">
+    <BodyComponent x="836" y="116" width="48" height="48" solid="false" />
+    <SpriteComponent textureKey="pump" />
+    <RepairComponent requiredItem="part" />
+  </GameObject>
+  <GameObject id="part">
+    <BodyComponent x="206" y="126" width="24" height="24" solid="false" />
+    <SpriteComponent textureKey="part" />
+    <CarryableComponent kind="part" />
+  </GameObject>
+  <GameObject id="diversion_valve">
+    <BodyComponent x="326" y="366" width="28" height="28" solid="false" />
+    <SpriteComponent textureKey="valve" />
+    <ValveComponent puddleId="diversion_puddle" puddleX="360" puddleY="240" open="false" />
+  </GameObject>
+  <GameObject id="leak_valve">
+    <BodyComponent x="646" y="366" width="28" height="28" solid="false" />
+    <SpriteComponent textureKey="valve" />
+    <ValveComponent puddleId="leak_puddle" puddleX="800" puddleY="160" open="true" />
+  </GameObject>
+  <GameObject id="slime">
+    <BodyComponent x="806" y="166" width="28" height="28" solid="true" />
+    <SpriteComponent textureKey="slime" />
+    <SlimeBehaviorComponent speed="85" />
+  </GameObject>
+</Scene>
