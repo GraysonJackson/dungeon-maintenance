@@ -4,9 +4,11 @@
 #include "ControllerComponent.h"
 #include "Engine.h"
 #include "Input.h"
+#include "Textures.h"
 #include <SDL2/SDL.h>
 #include <cmath>
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <set>
 #include <stdexcept>
@@ -16,6 +18,54 @@ int checks=0;
 void check(bool condition, const std::string& description) {
     if (!condition) throw std::runtime_error("TEST FAILED: "+description);
     ++checks; std::cout << "PASS " << description << '\n';
+}
+void testTextures() {
+    bool loaded=true;
+    for (const auto* name : {"player","slime","creature","crate","wall","pump",
+                             "valve","part","coal","heater","furnace","puddle"})
+        loaded=loaded && Textures::get(name);
+    check(loaded,"all scene textures load from BMP files by name");
+    check(!Textures::get("missing_texture"),"unknown texture lookup returns null");
+
+    auto directory=std::filesystem::temp_directory_path()/
+        ("dungeon-texture-test-"+std::to_string(SDL_GetPerformanceCounter()));
+    if (!std::filesystem::create_directory(directory)) throw std::runtime_error("Cannot create texture test folder");
+    auto rejects=[&](const std::filesystem::path& path, const std::string& message) {
+        bool rejected=false;
+        try { Textures::loadFolder(path.string()); }
+        catch (const std::runtime_error& error) {
+            rejected=std::string(error.what()).find(message) != std::string::npos;
+        }
+        check(rejected,message);
+    };
+    auto* playerTexture=Textures::get("player");
+    rejects(directory/"missing","Texture folder not found");
+    rejects(directory,"No BMP textures found");
+    auto broken=directory/"broken.bmp";
+    std::ofstream(broken) << "not a BMP";
+    rejects(directory,"Cannot load texture");
+    check(Textures::get("player")==playerTexture,"failed asset load preserves existing textures");
+    std::filesystem::remove(broken);
+
+    std::filesystem::copy_file(std::filesystem::path(Engine::dataPath)/"textures/player.bmp",directory/"renamed.bmp");
+    std::ofstream(directory/"notes.txt") << "Non-image files are ignored.";
+    Textures::loadFolder(directory.string());
+    check(Textures::get("renamed") && !Textures::get("player") && !Textures::get("notes"),
+          "folder discovery uses filenames and ignores non-BMP files");
+    Textures::loadFolder(Engine::dataPath+"/textures");
+    std::filesystem::remove(directory/"renamed.bmp");
+    std::filesystem::remove(directory/"notes.txt");
+    std::filesystem::remove(directory);
+
+    bool rejected=false;
+    try {
+        auto object=ComponentFactory().fromString(
+            "<GameObject id='missing_sprite'><BodyComponent/><SpriteComponent textureKey='missing_texture'/></GameObject>");
+        object->initialize();
+    } catch (const std::runtime_error& error) {
+        rejected=std::string(error.what())=="Unknown texture: missing_texture";
+    }
+    check(rejected,"sprite initialization reports a missing asset name");
 }
 void tick(std::set<SDL_Keycode> keys={}, int frames=1) {
     const std::set<SDL_Keycode> all{SDLK_w,SDLK_a,SDLK_s,SDLK_d,SDLK_e,SDLK_SPACE,SDLK_r,SDLK_m};
@@ -60,6 +110,7 @@ void capture(const std::string& directory,const std::string& name) {
 
 int runSelfTests(const std::string& captures) {
     if (!captures.empty()) std::filesystem::create_directories(captures);
+    testTextures();
     ComponentFactory factory;
     auto object=factory.fromString("<GameObject id='sample'><BodyComponent x='3' y='4' vx='5' vy='6' angle='15'/></GameObject>");
     auto* b=object->get<BodyComponent>();

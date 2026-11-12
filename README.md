@@ -19,7 +19,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\build.ps1
 .\build\dungeon-maintenance.exe
 ```
 
-The script uses `g++.exe` from PATH or `C:\msys64\mingw64\bin`. It copies the DLLs and room data into `build`, so the executable also runs from File Explorer. Keep those files together, and close the game before rebuilding.
+The script uses `g++.exe` from PATH or `C:\msys64\mingw64\bin`. It copies the DLLs, room data, and sprite assets into `build`, so the executable also runs from File Explorer. Keep those files together, and close the game before rebuilding.
 
 In VS Code, Ctrl+Shift+B builds. The Run Dungeon Maintenance and Test Dungeon Maintenance tasks launch the game and automated checks.
 
@@ -57,7 +57,11 @@ Each `GameObject` stores a `vector<unique_ptr<Component>>` and provides `add<T>(
 | `CarryableComponent` / `PushableComponent` | Mark items the player can carry or push |
 | `RepairComponent` / `HeatSourceComponent` | Track repairs and active heaters |
 
-TinyXML2 reads the rooms in `data`. `ComponentFactory` uses a map of constructor functions to build their objects and components. Valves create and delete puddle objects during play, and the minimap tracks current object positions. Graphics and the bitmap font are generated in code.
+TinyXML2 reads the rooms in `data`. `ComponentFactory` uses a map of constructor functions to build their objects and components. Valves create and delete puddle objects during play, and the minimap tracks current object positions.
+
+`Graphics` handles the SDL window and drawing. `Textures` loads `.bmp` files from `data/textures` into the existing map by filename: `player.bmp` becomes `player`. Magenta pixels are transparent. This uses SDL2 without another image library.
+
+The player, creatures, walls, and pushable chest use [Kenney's Tiny Dungeon](https://kenney.nl/assets/tiny-dungeon) assets under CC0. Machinery, items, and water retain the original artwork, saved as BMPs. Source filenames and the included license are in `data/textures`.
 
 ![Forge room with the minimap enabled](docs/images/forge_room.png)
 
@@ -67,4 +71,4 @@ TinyXML2 reads the rooms in `data`. `ComponentFactory` uses a map of constructor
 .\build\dungeon-maintenance.exe --self-test
 ```
 
-The 35 automated checks cover components, XML validation, input, collisions, carrying, creature behavior, both repairs, and restart. The full game has also been played through on Windows. Build output stays in the ignored `build` folder.
+The automated checks cover asset discovery and loading errors, components, XML validation, input, collisions, carrying, creature behavior, both repairs, and restart. Build output stays in the ignored `build` folder.

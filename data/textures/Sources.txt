@@ -1,0 +1,15 @@
+Kenney Tiny Dungeon 1.0
+https://kenney.nl/assets/tiny-dungeon
+License: CC0. See Kenney-License.txt.
+
+These sprites were renamed and converted from PNG to BMP:
+player.bmp   <- Tiles/tile_0097.png
+slime.bmp    <- Tiles/tile_0108.png
+creature.bmp <- Tiles/tile_0120.png
+crate.bmp    <- Tiles/tile_0089.png
+wall.bmp     <- Tiles/tile_0014.png
+
+The closed chest is the pushable crate. The pump, valves, part, coal,
+heater, furnace, and puddle use the original demo artwork, saved as BMPs.
+Magenta (255, 0, 255) is transparent. All sprites load from this folder;
+the game does not need a download or an asset conversion step to run.

@@ -7,7 +7,7 @@
 class Textures {
 public:
     struct SDL_Deleter { void operator()(SDL_Texture* texture) const { SDL_DestroyTexture(texture); } };
-    static void loadDefaults(SDL_Renderer* renderer);
+    static void loadFolder(const std::string& path);
     static SDL_Texture* get(const std::string& key);
     static void clear();
 private:

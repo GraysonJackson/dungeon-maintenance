@@ -1,6 +1,5 @@
 #pragma once
 #include "GameObject.h"
-#include <SDL2/SDL.h>
 #include <memory>
 #include <string>
 #include <utility>
@@ -20,7 +19,6 @@ public:
     static void update();
     static void render();
     static void step(double seconds);
-    static SDL_Renderer* getRenderer() { return renderer; }
     static void addGameObject(std::unique_ptr<GameObject> object);
     static void flushObjects();
     static GameObject* find(const std::string& id);
@@ -47,8 +45,6 @@ private:
     static void syncCarriedItem();
     static void drawInterface();
     static void drawMinimap();
-    static SDL_Window* window;
-    static SDL_Renderer* renderer;
     static bool isRunning;
     static std::vector<std::unique_ptr<GameObject>> gameObjects, pendingObjects;
     static std::string notification;

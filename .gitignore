@@ -3,3 +3,4 @@ build/
 *.o
 *.dll
 *.bmp
+!data/textures/*.bmp

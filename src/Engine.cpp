@@ -4,7 +4,7 @@
 #include "ComponentFactory.h"
 #include "ControllerComponent.h"
 #include "Input.h"
-#include "PixelFont.h"
+#include "Graphics.h"
 #include "SpriteComponent.h"
 #include "Textures.h"
 #include <algorithm>
@@ -13,8 +13,6 @@
 #include <queue>
 #include <stdexcept>
 
-SDL_Window* Engine::window = nullptr;
-SDL_Renderer* Engine::renderer = nullptr;
 bool Engine::isRunning = false;
 std::vector<std::unique_ptr<GameObject>> Engine::gameObjects, Engine::pendingObjects;
 std::string Engine::heldItem, Engine::dataPath, Engine::notification;
@@ -33,26 +31,13 @@ bool isCarried(const GameObject& object) {
     auto* item = object.get<CarryableComponent>();
     return item && item->carried;
 }
-void rect(SDL_Renderer* r, int x, int y, int w, int h, SDL_Color color) {
-    SDL_SetRenderDrawColor(r,color.r,color.g,color.b,color.a);
-    SDL_Rect area{x,y,w,h}; SDL_RenderFillRect(r,&area);
-}
 }
 
 bool Engine::init(const std::string& path, bool headless) {
     dataPath = path;
-    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER) != 0) return false;
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY,"0");
-    window = SDL_CreateWindow("Dungeon Maintenance",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,
-        width,height,headless ? SDL_WINDOW_HIDDEN : SDL_WINDOW_RESIZABLE);
-    if (!window) return false;
-    renderer = SDL_CreateRenderer(window,-1,headless ? SDL_RENDERER_SOFTWARE :
-                                  SDL_RENDERER_ACCELERATED|SDL_RENDERER_PRESENTVSYNC);
-    if (!renderer) renderer=SDL_CreateRenderer(window,-1,SDL_RENDERER_SOFTWARE);
-    if (!renderer) return false;
-    SDL_RenderSetLogicalSize(renderer,width,height);
-    SDL_SetRenderDrawBlendMode(renderer,SDL_BLENDMODE_BLEND);
-    Textures::loadDefaults(renderer);
+    if (SDL_Init(SDL_INIT_TIMER) != 0) return false;
+    if (!Graphics::init(width,height,headless)) return false;
+    Textures::loadFolder(dataPath+"/textures");
     isRunning=true;
     loadRoom(0);
     return true;
@@ -60,9 +45,8 @@ bool Engine::init(const std::string& path, bool headless) {
 void Engine::clean() {
     gameObjects.clear(); pendingObjects.clear();
     Textures::clear();
-    if (renderer) SDL_DestroyRenderer(renderer);
-    if (window) SDL_DestroyWindow(window);
-    renderer=nullptr; window=nullptr; isRunning=false;
+    Graphics::clean();
+    isRunning=false;
     SDL_Quit();
 }
 void Engine::handleEvents() {
@@ -274,14 +258,14 @@ void Engine::syncCarriedItem() {
 
 void Engine::drawInterface() {
     const SDL_Color muted{145,160,166,255}, gold{235,198,104,255}, mint{116,212,175,255};
-    drawText(renderer,"DUNGEON MAINTENANCE",40,28,3,gold);
-    drawText(renderer,currentRoom==0 ? "01 / PLUMBING PROBLEMS" : "02 / OCCUPATIONAL HAZARD",40,68,2);
-    drawText(renderer,"MAINTENANCE CHECKLIST",650,28,2,muted);
-    drawText(renderer,waterRestored ? "[X] WATER SYSTEM" : "[ ] WATER SYSTEM",650,55,2,waterRestored?mint:muted);
-    drawText(renderer,won ? "[X] FORGE" : "[ ] FORGE",650,79,2,won?mint:muted);
+    Graphics::drawText("DUNGEON MAINTENANCE",40,28,3,gold);
+    Graphics::drawText(currentRoom==0 ? "01 / PLUMBING PROBLEMS" : "02 / OCCUPATIONAL HAZARD",40,68,2);
+    Graphics::drawText("MAINTENANCE CHECKLIST",650,28,2,muted);
+    Graphics::drawText(waterRestored ? "[X] WATER SYSTEM" : "[ ] WATER SYSTEM",650,55,2,waterRestored?mint:muted);
+    Graphics::drawText(won ? "[X] FORGE" : "[ ] FORGE",650,79,2,won?mint:muted);
     auto* held=find(heldItem);
-    drawText(renderer,"CARRY: "+(held?held->get<CarryableComponent>()->kind:"EMPTY"),40,111,2,mint);
-    drawText(renderer,"WASD / ARROWS: MOVE   E: USE   SPACE: CARRY   M: MAP   R: RESTART   ESC: QUIT",40,762,2,muted);
+    Graphics::drawText("CARRY: "+(held?held->get<CarryableComponent>()->kind:"EMPTY"),40,111,2,mint);
+    Graphics::drawText("WASD / ARROWS: MOVE   E: USE   SPACE: CARRY   M: MAP   R: RESTART   ESC: QUIT",40,762,2,muted);
     std::string hint=currentRoom==0 ? "FIND THE PART. CLOSE THE LEAK. OPEN THE DIVERSION VALVE." :
                                       "LEAD THE CREATURE TO THE HEATER. THEN FUEL THE FURNACE.";
     if (auto* player=find("player")) if (auto* near=nearbyInteractable(*player->get<BodyComponent>())) {
@@ -289,13 +273,13 @@ void Engine::drawInterface() {
         if (auto* valve=near->get<ValveComponent>()) hint+=valve->open?" / OPEN":" / CLOSED";
         if (auto* repair=near->get<RepairComponent>(); repair && repair->complete) hint+=" / REPAIRED - ENTER FORGE";
     }
-    drawText(renderer,notificationTime>0 ? notification : hint,40,792,2,notificationTime>0?gold:mint);
+    Graphics::drawText(notificationTime>0 ? notification : hint,40,792,2,notificationTime>0?gold:mint);
 }
 void Engine::drawMinimap() {
     if (!minimap) return;
     constexpr int x=800,y=556,w=264,h=178;
-    rect(renderer,x,y,w,h,{14,25,32,245});
-    drawText(renderer,"LIVE MAP / M",x+10,y+10,1,{235,198,104,255});
+    Graphics::fillRect(x,y,w,h,{14,25,32,245});
+    Graphics::drawText("LIVE MAP / M",x+10,y+10,1,{235,198,104,255});
     for (const auto& object : gameObjects) {
         if (!object->alive) continue;
         auto* b=object->get<BodyComponent>();
@@ -305,17 +289,17 @@ void Engine::drawMinimap() {
         else if (object->get<HeatSeekingComponent>()) c={237,146,83,255};
         else if (object->get<PuddleComponent>()) c={79,168,211,255};
         else if (object->get<CarryableComponent>()) c={239,231,206,255};
-        rect(renderer,x+8+static_cast<int>(b->x()*0.24),y+27+static_cast<int>(b->y()*0.24),
+        Graphics::fillRect(x+8+static_cast<int>(b->x()*0.24),y+27+static_cast<int>(b->y()*0.24),
              std::max(3,static_cast<int>(b->width*0.24)),std::max(3,static_cast<int>(b->height*0.24)),c);
     }
 }
 void Engine::render() {
-    SDL_SetRenderDrawColor(renderer,19,30,38,255); SDL_RenderClear(renderer);
+    Graphics::clear({19,30,38,255});
     for (int y=0;y<worldHeight;y+=tileSize) for (int x=0;x<worldWidth;x+=tileSize) {
         bool alt=(x/tileSize+y/tileSize)%2;
         SDL_Color c=currentRoom==0 ? SDL_Color{static_cast<Uint8>(38+alt*3),static_cast<Uint8>(53+alt*3),static_cast<Uint8>(61+alt*3),255}
                                  : SDL_Color{static_cast<Uint8>(57+alt*3),static_cast<Uint8>(47+alt*3),static_cast<Uint8>(44+alt*3),255};
-        rect(renderer,x+offsetX,y+offsetY,tileSize-1,tileSize-1,c);
+        Graphics::fillRect(x+offsetX,y+offsetY,tileSize-1,tileSize-1,c);
     }
     for (int layer=0;layer<4;++layer) for (auto& object : gameObjects) {
         if (!object->alive) continue;
@@ -324,36 +308,24 @@ void Engine::render() {
     }
     const SDL_Color label{181,193,191,255};
     if (currentRoom==0) {
-        drawText(renderer,"PUMP",offsetX+842,offsetY+98,1,label);
-        drawText(renderer,"LEAK VALVE",offsetX+620,offsetY+338,1,label);
-        drawText(renderer,"DIVERSION",offsetX+300,offsetY+338,1,label);
-        drawText(renderer,"PART",offsetX+200,offsetY+100,1,label);
+        Graphics::drawText("PUMP",offsetX+842,offsetY+98,1,label);
+        Graphics::drawText("LEAK VALVE",offsetX+620,offsetY+338,1,label);
+        Graphics::drawText("DIVERSION",offsetX+300,offsetY+338,1,label);
+        Graphics::drawText("PART",offsetX+200,offsetY+100,1,label);
     } else {
-        drawText(renderer,"FURNACE",offsetX+832,offsetY+98,1,label);
-        drawText(renderer,"HEATER",offsetX+240,offsetY+178,1,label);
-        drawText(renderer,"HOT COAL",offsetX+660,offsetY+420,1,label);
+        Graphics::drawText("FURNACE",offsetX+832,offsetY+98,1,label);
+        Graphics::drawText("HEATER",offsetX+240,offsetY+178,1,label);
+        Graphics::drawText("HOT COAL",offsetX+660,offsetY+420,1,label);
     }
     drawInterface(); drawMinimap();
     if (won) {
-        rect(renderer,240,320,640,168,{19,30,38,245});
-        drawText(renderer,"INSPECTION PASSED",290,350,3,{116,212,175,255});
-        drawText(renderer,"WATER AND FORGE RESTORED",292,400,2);
-        drawText(renderer,"R: PLAY AGAIN",292,440,2,{235,198,104,255});
+        Graphics::fillRect(240,320,640,168,{19,30,38,245});
+        Graphics::drawText("INSPECTION PASSED",290,350,3,{116,212,175,255});
+        Graphics::drawText("WATER AND FORGE RESTORED",292,400,2);
+        Graphics::drawText("R: PLAY AGAIN",292,440,2,{235,198,104,255});
     }
-    if (!SDL_GetRenderTarget(renderer)) SDL_RenderPresent(renderer);
+    Graphics::present();
 }
 void Engine::capture(const std::string& path) {
-    // Read before Present: the backbuffer contents after Present are unspecified.
-    SDL_SetRenderTarget(renderer,nullptr);
-    SDL_Texture* target=SDL_CreateTexture(renderer,SDL_PIXELFORMAT_ARGB8888,SDL_TEXTUREACCESS_TARGET,width,height);
-    if (!target) throw std::runtime_error(SDL_GetError());
-    SDL_SetRenderTarget(renderer,target);
-    render();
-    std::unique_ptr<SDL_Surface,decltype(&SDL_FreeSurface)> surface(
-        SDL_CreateRGBSurfaceWithFormat(0,width,height,32,SDL_PIXELFORMAT_ARGB8888),SDL_FreeSurface);
-    if (!surface || SDL_RenderReadPixels(renderer,nullptr,surface->format->format,surface->pixels,surface->pitch)!=0) {
-        SDL_SetRenderTarget(renderer,nullptr); SDL_DestroyTexture(target); throw std::runtime_error(SDL_GetError());
-    }
-    SDL_SetRenderTarget(renderer,nullptr); SDL_DestroyTexture(target);
-    if (SDL_SaveBMP(surface.get(),path.c_str())!=0) throw std::runtime_error(SDL_GetError());
+    Graphics::capture(path,&Engine::render);
 }
