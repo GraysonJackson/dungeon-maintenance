@@ -14,6 +14,7 @@
 #include <stdexcept>
 
 bool Engine::isRunning = false;
+View Engine::view{160,204,800,480};
 std::vector<std::unique_ptr<GameObject>> Engine::gameObjects, Engine::pendingObjects;
 std::string Engine::heldItem, Engine::dataPath, Engine::notification;
 double Engine::deltaTime = 1.0/60.0, Engine::notificationTime = 0;
@@ -84,6 +85,13 @@ void Engine::update() {
     }
     flushObjects();
     if (requestedRoom >= 0) { int next=requestedRoom; requestedRoom=-1; loadRoom(next); }
+    updateView();
+}
+void Engine::updateView() {
+    if (auto* player=find("player")) {
+        auto* body=player->get<BodyComponent>();
+        view.follow(body->centerX(),body->centerY(),worldWidth,worldHeight);
+    }
 }
 void Engine::addGameObject(std::unique_ptr<GameObject> object) {
     if (find(object->id)) throw std::runtime_error("Duplicate object id: "+object->id);
@@ -117,6 +125,7 @@ void Engine::loadRoom(int room) {
     gameObjects=std::move(objects);
     for (auto& object : gameObjects) object->initialize();
     flushObjects();
+    updateView();
     message(room == 0 ? "RESTORE THE PUMP. VALVES CAN MOVE SLIMES." :
                           "COOLING RESTORED. BRING COAL TO THE HEATER.");
 }
@@ -295,28 +304,34 @@ void Engine::drawMinimap() {
 }
 void Engine::render() {
     Graphics::clear({19,30,38,255});
+    Graphics::setClip(&view.viewport);
     for (int y=0;y<worldHeight;y+=tileSize) for (int x=0;x<worldWidth;x+=tileSize) {
         bool alt=(x/tileSize+y/tileSize)%2;
         SDL_Color c=currentRoom==0 ? SDL_Color{static_cast<Uint8>(38+alt*3),static_cast<Uint8>(53+alt*3),static_cast<Uint8>(61+alt*3),255}
                                  : SDL_Color{static_cast<Uint8>(57+alt*3),static_cast<Uint8>(47+alt*3),static_cast<Uint8>(44+alt*3),255};
-        Graphics::fillRect(x+offsetX,y+offsetY,tileSize-1,tileSize-1,c);
+        auto point=view.worldToScreen(x,y);
+        Graphics::fillRect(point.x,point.y,tileSize-1,tileSize-1,c);
     }
     for (int layer=0;layer<4;++layer) for (auto& object : gameObjects) {
         if (!object->alive) continue;
         int objectLayer=object->get<PuddleComponent>()?0:isCarried(*object)?3:actor(*object)?2:1;
         if (objectLayer==layer) object->draw();
     }
-    const SDL_Color label{181,193,191,255};
+    auto label=[](const std::string& text, int x, int y) {
+        auto point=view.worldToScreen(x,y);
+        Graphics::drawText(text,point.x,point.y,1,{181,193,191,255});
+    };
     if (currentRoom==0) {
-        Graphics::drawText("PUMP",offsetX+842,offsetY+98,1,label);
-        Graphics::drawText("LEAK VALVE",offsetX+620,offsetY+338,1,label);
-        Graphics::drawText("DIVERSION",offsetX+300,offsetY+338,1,label);
-        Graphics::drawText("PART",offsetX+200,offsetY+100,1,label);
+        label("PUMP",842,98);
+        label("LEAK VALVE",620,338);
+        label("DIVERSION",300,338);
+        label("PART",200,100);
     } else {
-        Graphics::drawText("FURNACE",offsetX+832,offsetY+98,1,label);
-        Graphics::drawText("HEATER",offsetX+240,offsetY+178,1,label);
-        Graphics::drawText("HOT COAL",offsetX+660,offsetY+420,1,label);
+        label("FURNACE",832,98);
+        label("HEATER",240,178);
+        label("HOT COAL",660,420);
     }
+    Graphics::setClip(nullptr);
     drawInterface(); drawMinimap();
     if (won) {
         Graphics::fillRect(240,320,640,168,{19,30,38,245});

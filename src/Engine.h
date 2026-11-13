@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "View.h"
 #include <memory>
 #include <string>
 #include <utility>
@@ -11,7 +12,7 @@ class Engine {
 public:
     static constexpr int width = 1120, height = 820;
     static constexpr int worldWidth = 1040, worldHeight = 600, tileSize = 40;
-    static constexpr int offsetX = 40, offsetY = 144;
+    static View view;
     static bool init(const std::string& dataPath, bool headless = false);
     static void run(int frameLimit = 0);
     static void clean();
@@ -43,6 +44,7 @@ public:
 private:
     static bool tryAxis(BodyComponent& body, double amount, bool horizontal, bool push, int depth);
     static void syncCarriedItem();
+    static void updateView();
     static void drawInterface();
     static void drawMinimap();
     static bool isRunning;

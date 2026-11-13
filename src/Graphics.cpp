@@ -49,6 +49,10 @@ void Graphics::present() {
     if (!SDL_GetRenderTarget(renderer)) SDL_RenderPresent(renderer);
 }
 
+void Graphics::setClip(const SDL_Rect* area) {
+    SDL_RenderSetClipRect(renderer,area);
+}
+
 void Graphics::fillRect(int x, int y, int width, int height, SDL_Color color) {
     SDL_SetRenderDrawColor(renderer,color.r,color.g,color.b,color.a);
     SDL_Rect area{x,y,width,height};

@@ -19,7 +19,7 @@ void SpriteComponent::draw() {
         tint={100,110,120,255};
     if (auto* repair = parent().get<RepairComponent>(); repair && repair->complete)
         tint={125,255,170,255};
-    Graphics::drawTexture(textureKey,Engine::offsetX+static_cast<int>(body->x()),
-        Engine::offsetY+static_cast<int>(body->y()),static_cast<int>(body->width),
+    auto point=Engine::view.worldToScreen(body->x(),body->y());
+    Graphics::drawTexture(textureKey,point.x,point.y,static_cast<int>(body->width),
         static_cast<int>(body->height),body->angle(),tint);
 }

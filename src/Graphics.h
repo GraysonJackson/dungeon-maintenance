@@ -9,6 +9,7 @@ public:
     static SDL_Texture* loadTexture(const std::string& path);
     static void clear(SDL_Color color);
     static void present();
+    static void setClip(const SDL_Rect* area);
     static void fillRect(int x, int y, int width, int height, SDL_Color color);
     static void drawTexture(const std::string& name, int x, int y, int width, int height,
                             double angle = 0, SDL_Color tint = {255,255,255,255});

@@ -106,11 +106,43 @@ void navigate(double x,double y,bool waitForFollower=false) {
 void capture(const std::string& directory,const std::string& name) {
     if (!directory.empty()) Engine::capture(directory+"/"+name+".bmp");
 }
+void testView(const std::string& captures) {
+    View view{40,144,800,480};
+    auto point=view.worldToScreen(400,240);
+    check(point.x==440 && point.y==384,"view center maps to the center of its screen area");
+    view.follow(520,300,1040,600);
+    point=view.worldToScreen(532,316);
+    check(point.x==452 && point.y==400,"world points move relative to the view center");
+    view.follow(0,0,1040,600);
+    check(view.centerX==400 && view.centerY==240,"view stops at the left and top room edges");
+    view.follow(1040,600,1040,600);
+    check(view.centerX==640 && view.centerY==360,"view stops at the right and bottom room edges");
+
+    auto& player=body("player");
+    player.x()=586; player.y()=286;
+    tick();
+    Engine::minimap=true;
+    capture(captures,"view_before");
+    double centerX=Engine::view.centerX, centerY=Engine::view.centerY;
+    tick({SDLK_d,SDLK_s},10);
+    check(Engine::view.centerX>centerX && Engine::view.centerY>centerY &&
+          Engine::view.centerX==player.centerX() && Engine::view.centerY==player.centerY(),
+          "view follows player movement on both axes");
+    capture(captures,"view_after");
+    double x=player.x(), y=player.y();
+    Engine::render();
+    check(player.x()==x && player.y()==y,"rendering through the view preserves world positions");
+    Engine::minimap=false;
+    use(SDLK_r);
+    check(Engine::view.centerX==400 && Engine::view.centerY==360 && body("player").x()==86 && body("player").y()==446,
+          "room restart resets the player and view");
+}
 }
 
 int runSelfTests(const std::string& captures) {
     if (!captures.empty()) std::filesystem::create_directories(captures);
     testTextures();
+    testView(captures);
     ComponentFactory factory;
     auto object=factory.fromString("<GameObject id='sample'><BodyComponent x='3' y='4' vx='5' vy='6' angle='15'/></GameObject>");
     auto* b=object->get<BodyComponent>();
@@ -181,6 +213,7 @@ int runSelfTests(const std::string& captures) {
     capture(captures,"pump_repaired");
     use(SDLK_e);
     check(Engine::currentRoom==1 && Engine::waterRestored,"repaired pump unlocks forge and preserves cooling");
+    check(Engine::view.centerX==400 && Engine::view.centerY==360,"room transition resets the view to the new player");
     check(Engine::stationBlocked(body("furnace")),"forge creature initially blocks furnace controls");
     tick({SDLK_d},165); tick();
     navigate(700,460); use(SDLK_SPACE);
@@ -203,6 +236,7 @@ int runSelfTests(const std::string& captures) {
     capture(captures,"inspection_passed");
     use(SDLK_r);
     check(Engine::currentRoom==0 && !Engine::won && !Engine::waterRestored && Engine::heldItem.empty(),"R restarts after winning and resets progress");
+    check(Engine::view.centerX==400 && Engine::view.centerY==360,"restart after winning resets the view");
     std::cout << "All " << checks << " checks passed.\n";
     return 0;
 }
