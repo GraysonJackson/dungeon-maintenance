@@ -13,8 +13,7 @@ bool Graphics::init(int width, int height, bool headless) {
     window = SDL_CreateWindow("Dungeon Maintenance",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,
         width,height,headless ? SDL_WINDOW_HIDDEN : SDL_WINDOW_RESIZABLE);
     if (!window) return false;
-    renderer = SDL_CreateRenderer(window,-1,headless ? SDL_RENDERER_SOFTWARE :
-                                  SDL_RENDERER_ACCELERATED|SDL_RENDERER_PRESENTVSYNC);
+    renderer = SDL_CreateRenderer(window,-1,headless ? SDL_RENDERER_SOFTWARE : SDL_RENDERER_ACCELERATED);
     if (!renderer) renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_SOFTWARE);
     if (!renderer) return false;
     return SDL_RenderSetLogicalSize(renderer,width,height) == 0 &&

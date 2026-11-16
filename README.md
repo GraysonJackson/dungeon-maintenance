@@ -1,8 +1,8 @@
 # Dungeon Maintenance
 
-Dungeon Maintenance is a top-down puzzle demo built with C++17 and SDL2 for the component architecture assignment. Carry parts, push crates, and redirect creatures to repair the dungeon's pump and forge. Both repairs are needed to pass inspection.
+Dungeon Maintenance is a top-down puzzle demo built with C++17 and SDL2. Carry parts, push crates, and redirect creatures to repair the dungeon's pump and forge. Both repairs are needed to pass inspection.
 
-![Pump room](docs/images/pump_room.png)
+![The repaired pump at the right edge of the room](docs/images/pump_room.png)
 
 ## Build and run
 
@@ -29,6 +29,8 @@ For Linux or an MSYS2 terminal with the dependencies installed:
 bash build.sh
 ./build/dungeon-maintenance
 ```
+
+The game targets 60 FPS by default. To try 30 FPS on Windows, run `.\build\dungeon-maintenance.exe --fps 30`. In Bash, run `./build/dungeon-maintenance --fps 30`.
 
 ## Controls
 
@@ -63,6 +65,10 @@ TinyXML2 reads the rooms in `data`. `ComponentFactory` uses a map of constructor
 
 The player, creatures, walls, and pushable chest use [Kenney's Tiny Dungeon](https://kenney.nl/assets/tiny-dungeon) assets under CC0. Machinery, items, and water retain the original artwork, saved as BMPs. Source filenames and the included license are in `data/textures`.
 
+The engine's `View` follows the player and stops at room edges. Sprites, floor tiles, and labels draw relative to the view. The interface and minimap stay in place as the room scrolls.
+
+The game loop waits for the time left in each frame and skips the wait when a frame runs over budget. Movement and collisions use `deltaTime` in seconds so the player covers the same distance over the same time at different frame rates.
+
 ![Forge room with the minimap enabled](docs/images/forge_room.png)
 
 ## Tests
@@ -71,4 +77,4 @@ The player, creatures, walls, and pushable chest use [Kenney's Tiny Dungeon](htt
 .\build\dungeon-maintenance.exe --self-test
 ```
 
-The automated checks cover asset discovery and loading errors, components, XML validation, input, collisions, carrying, creature behavior, both repairs, and restart. Build output stays in the ignored `build` folder.
+The automated checks cover asset loading, input, collisions, camera following, and a full playthrough of both rooms. A timing check verifies that the player moves 180 pixels in one second at 15, 30, and 60 FPS. Build output stays in the ignored `build` folder.

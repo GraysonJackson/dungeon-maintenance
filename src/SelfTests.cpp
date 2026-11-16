@@ -67,7 +67,7 @@ void testTextures() {
     }
     check(rejected,"sprite initialization reports a missing asset name");
 }
-void tick(std::set<SDL_Keycode> keys={}, int frames=1) {
+void tick(std::set<SDL_Keycode> keys={}, int frames=1, double seconds=1.0/60.0) {
     const std::set<SDL_Keycode> all{SDLK_w,SDLK_a,SDLK_s,SDLK_d,SDLK_e,SDLK_SPACE,SDLK_r,SDLK_m};
     for (int i=0;i<frames;++i) {
         Input::beginFrame();
@@ -75,7 +75,7 @@ void tick(std::set<SDL_Keycode> keys={}, int frames=1) {
             SDL_Event event{}; event.type=keys.count(key)?SDL_KEYDOWN:SDL_KEYUP;
             event.key.keysym.sym=key; Input::processEvent(event);
         }
-        Engine::step(1.0/60.0);
+        Engine::step(seconds);
     }
 }
 BodyComponent& body(const std::string& id) {
@@ -137,12 +137,24 @@ void testView(const std::string& captures) {
     check(Engine::view.centerX==400 && Engine::view.centerY==360 && body("player").x()==86 && body("player").y()==446,
           "room restart resets the player and view");
 }
+
+void testMovementTiming() {
+    for (int fps : {15,30,60}) {
+        Engine::loadRoom(0);
+        double startX=body("player").x();
+        tick({SDLK_d},fps,1.0/fps);
+        check(std::abs(body("player").x()-startX-180)<0.001,
+              "player moves 180 pixels in one second at "+std::to_string(fps)+" FPS");
+    }
+    Engine::loadRoom(0);
+}
 }
 
 int runSelfTests(const std::string& captures) {
     if (!captures.empty()) std::filesystem::create_directories(captures);
     testTextures();
     testView(captures);
+    testMovementTiming();
     ComponentFactory factory;
     auto object=factory.fromString("<GameObject id='sample'><BodyComponent x='3' y='4' vx='5' vy='6' angle='15'/></GameObject>");
     auto* b=object->get<BodyComponent>();

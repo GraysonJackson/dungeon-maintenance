@@ -37,6 +37,7 @@ public:
     static double distance(const BodyComponent& a, const BodyComponent& b);
     static void message(const std::string& text);
     static void capture(const std::string& path);
+    static int targetFps;
     static double deltaTime;
     static int currentRoom;
     static bool waterRestored, won, minimap;

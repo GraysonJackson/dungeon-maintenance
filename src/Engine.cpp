@@ -9,14 +9,17 @@
 #include "Textures.h"
 #include <algorithm>
 #include <array>
+#include <chrono>
 #include <cmath>
 #include <queue>
 #include <stdexcept>
+#include <thread>
 
 bool Engine::isRunning = false;
 View Engine::view{160,204,800,480};
 std::vector<std::unique_ptr<GameObject>> Engine::gameObjects, Engine::pendingObjects;
 std::string Engine::heldItem, Engine::dataPath, Engine::notification;
+int Engine::targetFps = 60;
 double Engine::deltaTime = 1.0/60.0, Engine::notificationTime = 0;
 int Engine::currentRoom = 0, Engine::requestedRoom = -1;
 bool Engine::waterRestored = false, Engine::won = false, Engine::minimap = false;
@@ -60,19 +63,34 @@ void Engine::handleEvents() {
     if (Input::isKeyPressed(SDLK_ESCAPE)) isRunning=false;
 }
 void Engine::run(int frameLimit) {
-    Uint64 previous=SDL_GetPerformanceCounter();
+    using Clock = std::chrono::steady_clock;
+    using Seconds = std::chrono::duration<double>;
+    const Seconds frameBudget{1.0/targetFps};
+    auto previous=Clock::now();
+    auto deadline=previous+frameBudget;
     int frames=0;
     while (isRunning && (!frameLimit || frames < frameLimit)) {
-        Uint64 now=SDL_GetPerformanceCounter();
-        double seconds=static_cast<double>(now-previous)/SDL_GetPerformanceFrequency();
-        previous=now;
-        handleEvents(); step(seconds); render();
+        const auto frameStart=Clock::now();
+        handleEvents();
+        if (!isRunning) break;
+        // The first frame has no previous frame to measure.
+        step(frames == 0 ? frameBudget.count() : Seconds(frameStart-previous).count());
+        previous=frameStart;
+        render();
         ++frames;
-        SDL_Delay(1);
+        const auto frameEnd=Clock::now();
+        if (frameEnd < deadline) {
+            std::this_thread::sleep_until(deadline);
+        } else {
+            deadline=frameEnd;
+        }
+        // Keep the schedule when sleep wakes us a little late.
+        deadline+=frameBudget;
     }
 }
 void Engine::step(double seconds) {
-    deltaTime=std::clamp(seconds,0.0001,0.05);
+    deltaTime=seconds;
+    if (deltaTime <= 0) return;
     update();
 }
 void Engine::update() {

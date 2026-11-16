@@ -1,6 +1,7 @@
 #define SDL_MAIN_HANDLED
 #include "Engine.h"
 #include <SDL2/SDL.h>
+#include <charconv>
 #include <filesystem>
 #include <iostream>
 #include <stdexcept>
@@ -17,8 +18,15 @@ int main(int argc, char** argv) {
             if (arg=="--self-test") test=true;
             else if (arg=="--data" && i+1<argc) data=argv[++i];
             else if (arg=="--frames" && i+1<argc) frames=std::stoi(argv[++i]);
+            else if (arg=="--fps" && i+1<argc) {
+                const std::string value=argv[++i];
+                const char* end=value.data()+value.size();
+                auto [parsed, error]=std::from_chars(value.data(),end,Engine::targetFps);
+                if (error != std::errc{} || parsed != end || Engine::targetFps <= 0)
+                    throw std::runtime_error("--fps requires a positive whole number");
+            }
             else if (arg=="--capture-dir" && i+1<argc) captures=argv[++i];
-            else throw std::runtime_error("Usage: dungeon-maintenance [--self-test] [--data DIR] [--frames N] [--capture-dir DIR]");
+            else throw std::runtime_error("Usage: dungeon-maintenance [--fps N] [--self-test] [--data DIR] [--frames N] [--capture-dir DIR]");
         }
         if (test && !SDL_getenv("SDL_VIDEODRIVER")) SDL_setenv("SDL_VIDEODRIVER","dummy",1);
         SDL_SetMainReady();
